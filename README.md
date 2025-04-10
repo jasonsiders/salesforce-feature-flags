@@ -40,7 +40,7 @@ if(flags.evaluate('enhancedQuoteEditor').isEnabled()){
 The code works by evaluating (in this order) if:
 
 - The running user has a Custom Permission with a matching name of `enhancedQuoteEditor`. This is done using the standard [`FeatureManagement`](https://developer.salesforce.com/docs/atlas.en-us.apexref.meta/apexref/apex_class_System_FeatureManagement.htm#apex_System_FeatureManagement_checkPermission) class from Apex
-- A custom metadata type record of the `FeatureFlag__mdt` type matches the name `enhancedQuoteEditor` and has `Is_Active__c` set to `true`
+- A custom metadata type record of the `FeatureFlag__mdt` type matches the name `enhancedQuoteEditor` and has `IsActive__c` set to `true`
 
 This allows you to configure user-based feature flags (as custom permissions) and global feature flags (as custom metadata types).
 
@@ -164,8 +164,8 @@ public with sharing class FeatureFlagProviderMock implements IFeatureFlagProvide
     public Map<String,FeatureFlag__mdt> getFeatureFlags(){
         Map<String,FeatureFlag__mdt> flags = new Map<String,FeatureFlag__mdt>();
 
-        FeatureFlag__mdt flag1 = new FeatureFlag__mdt(DeveloperName = 'flag1', Is_Active__c = true);
-        FeatureFlag__mdt flag2 = new FeatureFlag__mdt(DeveloperName = 'flag2', Is_Active__c = false);
+        FeatureFlag__mdt flag1 = new FeatureFlag__mdt(DeveloperName = 'flag1', IsActive__c = true);
+        FeatureFlag__mdt flag2 = new FeatureFlag__mdt(DeveloperName = 'flag2', IsActive__c = false);
 
         flags.put('flag1',flag1);
         flags.put('flag2',flag2);
