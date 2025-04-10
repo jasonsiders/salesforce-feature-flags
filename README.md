@@ -1,15 +1,14 @@
 # Salesforce Feature Flags
 
-Simple framework for using feature flags in apex driven by Custom Permissions and Custom Metadata Types. 
+Simple framework for using feature flags in apex driven by Custom Permissions and Custom Metadata Types.
 
 ## Table of Contents
 
-* [`FeatureFlags` class](#featureflags-class)
-* [Custom Permissions and Metadata Types](#custom-permissions-and-metadata-types)
-* [Info with `FeatureEvaluationResult`](#info-with-featureevaluationresult)
-* [In LWC](#in-lwc)
-* [Testing](#testing)
-
+- [`FeatureFlags` class](#featureflags-class)
+- [Custom Permissions and Metadata Types](#custom-permissions-and-metadata-types)
+- [Info with `FeatureEvaluationResult`](#info-with-featureevaluationresult)
+- [In LWC](#in-lwc)
+- [Testing](#testing)
 
 ### `FeatureFlags` class
 
@@ -68,30 +67,32 @@ System.debug(result);
 [featureName=enhancedQuoteEditor, reason=FLAG_NOT_FOUND, result=false]
 ```
 
-This information can be useful for logging and troubleshooting. 
+This information can be useful for logging and troubleshooting.
 
 ### In LWC
 
 To use a feature flag in LWC, use the static method `lwcEvaluate`, which simply returns `true` or `false`. For example
 
 ```javascript
-import { LightningElement } from 'lwc';
-import lwcEvaluate from '@salesforce/apex/FeatureFlags.lwcEvaluate';
+import { LightningElement } from "lwc";
+import lwcEvaluate from "@salesforce/apex/FeatureFlags.lwcEvaluate";
 
 export default class FlagsInLWC extends LightningElement {
+  async connectedCallback() {
+    let featureNewUIComponents = await lwcEvaluate({
+      featureName: "featureNewUIComponents"
+    });
 
-
-    async connectedCallback() {
-        
-        let featureNewUIComponents = await lwcEvaluate({ featureName: 'featureNewUIComponents' });
-        
-        if(featureNewUIComponents){
-            console.log('featureNewUIComponents is enabled. Show the new UI components');
-        }
-        else{ 
-            console.log('featureNewUIComponents is disabled. Show the old UI components');
-        }
+    if (featureNewUIComponents) {
+      console.log(
+        "featureNewUIComponents is enabled. Show the new UI components"
+      );
+    } else {
+      console.log(
+        "featureNewUIComponents is disabled. Show the old UI components"
+      );
     }
+  }
 }
 ```
 
@@ -102,7 +103,7 @@ export default class FlagsInLWC extends LightningElement {
 If you simply want to set the value of a flag to `true` or `false` at test time, without relaying on existing custom permissions or metadata types, simply use the static `FeatureFlags.setMockValue('mockedFeatureValue', true);` method, as follows
 
 ```java
-@IsTest 
+@IsTest
 static void testMockValues(){
 
     FeatureFlags.setMockValue('mockedFeatureValue', true);
@@ -115,7 +116,7 @@ static void testMockValues(){
     Test.stopTest();
 ```
 
-In the above example, inserting the account fires the `AccountTriggerHandler`. Somewhere in that code the `FeatureFlags` class will be instantiated, and it will *remember* that `mockedFeatureValue` was set to `true`. The code will not try to find this flag in custom permissions or metadata types. 
+In the above example, inserting the account fires the `AccountTriggerHandler`. Somewhere in that code the `FeatureFlags` class will be instantiated, and it will _remember_ that `mockedFeatureValue` was set to `true`. The code will not try to find this flag in custom permissions or metadata types.
 
 #### With Dependency Injection
 
@@ -132,7 +133,7 @@ This works because the default constructor of `FeatureFlags` using an instance o
 
 ```java
 public with sharing class FeatureFlagProvider implements IFeatureFlagProvider {
-    
+
     public Set<String> getCustomPermissionNames(){
         Set<String> customPermissionNames = new Set<String>();
         List<CustomPermission> perms = [SELECT Id, DeveloperName FROM CustomPermission];
@@ -153,7 +154,7 @@ In a test class, you can create a Mock that implements `IFeatureFlagProvider`, a
 
 ```java
 public with sharing class FeatureFlagProviderMock implements IFeatureFlagProvider {
-    
+
     public Set<String> getCustomPermissionNames(){
         Set<String> customPermissionNames = new Set<String>();
         customPermissionNames.add('permission1');
@@ -170,7 +171,7 @@ public with sharing class FeatureFlagProviderMock implements IFeatureFlagProvide
         flags.put('flag1',flag1);
         flags.put('flag2',flag2);
         return flags;
-        
+
     }
 
 }
@@ -186,4 +187,5 @@ Test.startTest();
 FeatureFlags.FeatureEvaluationResult result = flags.evaluate('flag1');
 Test.stopTest();
 ```
+
 You can see a complete implementation of this pattern [here](https://github.com/pgonzaleznetwork/salesforce-feature-flags/blob/main/force-app/main/default/classes/FeatureFlagsTests.cls)
