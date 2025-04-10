@@ -37,7 +37,7 @@ public with sharing class FeatureFlags implements IFeatureFlags {
 
             if(features.containsKey(featureName)){
                 
-                if(features.get(featureName).Is_Active__c){
+                if(features.get(featureName).IsActive__c){
                     result = new FeatureEvaluationResult(true, featureName, FeatureReason.CUSTOM_METADATA_TYPE_ENABLED);
                 }
                 else{

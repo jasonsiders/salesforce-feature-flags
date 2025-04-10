@@ -10,8 +10,8 @@ public with sharing class FeatureFlagProviderMock implements IFeatureFlagProvide
     public Map<String,FeatureFlag__mdt> getFeatureFlags(){
         Map<String,FeatureFlag__mdt> flags = new Map<String,FeatureFlag__mdt>();
 
-        FeatureFlag__mdt flag1 = new FeatureFlag__mdt(DeveloperName = 'flag1', Is_Active__c = true);
-        FeatureFlag__mdt flag2 = new FeatureFlag__mdt(DeveloperName = 'flag2', Is_Active__c = false);
+        FeatureFlag__mdt flag1 = new FeatureFlag__mdt(DeveloperName = 'flag1', IsActive__c = true);
+        FeatureFlag__mdt flag2 = new FeatureFlag__mdt(DeveloperName = 'flag2', IsActive__c = false);
 
         flags.put('flag1',flag1);
         flags.put('flag2',flag2);
